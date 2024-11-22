@@ -23,6 +23,9 @@ which is able to perform following operations on a provided text line:
 #define FINITE_STATE_MACHINE_STATE_MACHINE_H
 
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stdio.h>
 #include "text-pair.h"
 
 /**
@@ -38,7 +41,7 @@ which is able to perform following operations on a provided text line:
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int stateMachine(char* line, char** lexemesSet);
+int stateMachine(char* line, char* lexemesSet);
 
 /**
  * This function removes redundant spaces in a provided line.
@@ -66,7 +69,7 @@ int removeBlockCommentary(char* line);
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char** lexemesSet);
+int buildLexemesSet(char* line, char* lexemesSet);
 
 /**
  * This function removes character from a line ant a specified index.
@@ -77,5 +80,7 @@ int buildLexemesSet(char* line, char** lexemesSet);
  * @returns 0 if success, -1 if something went wrong
  */
 int removeAtIndex(char *line, int index);
+
+int removeSubstring(char* line, int startIndex, int endIndex);
 
 #endif

@@ -16,13 +16,19 @@ This is a main file for the State Machine program.
 #include "state-machine.h"
 
 int main(int argc, char** argv) {
+    
+    char line[] = "a = w       + wxyz;!/*sadasd*/";
+    char* lexemesSet = malloc(strlen(line) + 1);
 
-    char** lexemesSet;
-    char line[] = "a = x       + y";
+    char line2[] = "0123456789";
 
     int programStatus = stateMachine(line, lexemesSet);
 
     printf("Formated line is %s\n", line);
+
+    removeSubstring(line2, 2, 7);
+
+    printf("%s", line2);
 
     return programStatus;
 }

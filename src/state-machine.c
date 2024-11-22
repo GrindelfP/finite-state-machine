@@ -34,7 +34,7 @@ which is able to perform following operations on a provided text line:
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int stateMachine(char* line, char** lexemesSet) {
+int stateMachine(char* line, char* lexemesSet) {
     
     int status;
     
@@ -77,6 +77,8 @@ int removeRedundantSpaces(char* line) {
 
 /**
  * This function removes block commentary from a provided line.
+ * It is built using a following state machine, 
+ * which table is presented inside the function.
  * 
  * @param line       provided text line
  * 
@@ -84,7 +86,57 @@ int removeRedundantSpaces(char* line) {
  */
 int removeBlockCommentary(char* line) {
 
-    return 0;
+    /*
+        STATE MACHINE:
+        ╔═══════╦═══════╦════╦════╦═══════╗
+        ║ State ║ Input ║ /  ║ *  ║ OTHER ║
+        ╠═══════╬═══════╬════╬════╬═══════╣
+        ║ q0    ║ ε     ║ q1 ║ q0 ║  q0   ║
+        ║ q1    ║ '/'   ║ q1 ║ q2 ║  q0   ║
+        ║ q2    ║ '/*'  ║ q0 ║ q3 ║  q2   ║
+        ║ q3    ║ '/**' ║ q0 ║ q3 ║  q2   ║
+        ╚═══════╩═══════╩════╩════╩═══════╝
+    */
+    
+    int state = 0, status = 0, lineLength = strlen(line), startIndex = 0, endIndex = 0;
+
+    for (int i = 0; i < lineLength; ++i) {
+        switch (state) {
+        case 0:
+            if (line[i] == '/') { state = 1; startIndex = i; }
+            else if (line[i] == '*') state = 0;
+            else state = 0;
+            break;
+ 
+        case 1:
+            if (line[i] == '/') state = 1;
+            else if (line[i] == '*') state = 2;
+            else state = 0;
+            break;
+
+        case 2:
+            if (line[i] == '/') state = 1;
+            else if (line[i] == '*') state = 3;
+            else state = 2;
+            break;
+
+        case 3:
+            if (line[i] == '/') {
+                endIndex = i;
+                removeSubstring(line, startIndex, endIndex);
+                state = 0;
+            }
+            else if (line[i] == '*') state = 3;
+            else state = 2;
+            break;
+
+        default:
+            status = -1; break;
+        }
+        
+    }
+
+    return status;
 }
 
 /**
@@ -95,9 +147,45 @@ int removeBlockCommentary(char* line) {
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char** lexemesSet) {
+int buildLexemesSet(char* line, char* lexemesSet) {
 
-    return 0;
+    char *lexemes = malloc(strlen(line) + 1);
+    int i = 0;
+
+    strcpy(lexemes, line);
+    int len = strlen(lexemes);
+    
+    while (i < len) {
+        if (isspace(lexemes[i])) {
+            // Skip whitespace (redundant also, but these should never get here)
+            i++;
+        } else if (isdigit(lexemes[i])) {
+            // Handle numbers
+            while (isdigit(lexemes[i])) {
+                putchar(lexemes[i]);
+                i++;
+            }
+            putchar('\n');
+        } else if (isalpha(lexemes[i])) {
+            // Handle identifiers (variables)
+            while (isalnum(lexemes[i]) || lexemes[i] == '_') {
+                putchar(lexemes[i]);
+                i++;
+            }
+            putchar('\n');
+        } else {
+            // Handle operators and symbols
+            putchar(lexemes[i]);
+            putchar('\n');
+            i++;
+        }
+    }
+
+    strcpy(lexemesSet, lexemes);
+    free(lexemes);
+    
+    return 0; // I guess there is nothingh which can go wrong in the logic 
+              // (only internal errors)
 }
 
 /**
@@ -119,6 +207,23 @@ int removeAtIndex(char *line, int index) {
         }
         line[i] = '\0';
     } 
+
+    return status;
+}
+
+int removeSubstring(char* line, int startIndex, int endIndex) {
+    int status = -1, len = strlen(line);
+    
+    if (startIndex > 0 && endIndex <= len && startIndex < endIndex) {
+        
+        // Shift characters after the substring to the left
+        int i;
+        for (i = endIndex + 1; i < len; i++) {
+            line[startIndex + i - endIndex - 1] = line[i];
+        }
+    
+        line[startIndex + i - endIndex - 1] = '\0';
+    }
 
     return status;
 }
