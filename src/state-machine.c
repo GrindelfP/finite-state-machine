@@ -31,18 +31,19 @@ which is able to perform following operations on a provided text line:
  * @param lexemesSet storage memory for lexemes set 
  *                   (should be uninitialized, because it is initialized
  *                    inside the function)
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int stateMachine(char** line, char** lexemesSet) {
+int stateMachine(char* line, char** lexemesSet) {
     
-    int status;
+    int status, lineLength = strlen(line);
     
-    status = removeRedundantSpaces(line);
+    status = removeRedundantSpaces(line, lineLength);
 
-    if (status == 0) status = removeBlockCommentary(line);
+    if (status == 0) status = removeBlockCommentary(line, lineLength);
     
-    if (status == 0) status = buildLexemesSet(line, lexemesSet);
+    if (status == 0) status = buildLexemesSet(line, lexemesSet, lineLength);
     
     return status;
 } 
@@ -50,36 +51,39 @@ int stateMachine(char** line, char** lexemesSet) {
 /**
  * This function removes redundant spaces in a provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
+ * @param lineLenght lenght of the provided line
  * 
- * @returns provided line without redundant spaces.
+ * @returns 0 if success, -1 if something went wrong
  */
-int removeRedundantSpaces(char** line) {
+int removeRedundantSpaces(char* line, int lineLength) {
     
-    // TO BE IMPLEMENTED
+    return -1;
 }
 
 /**
  * This function removes block commentary from a provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int removeBlockCommentary(char** line) {
+int removeBlockCommentary(char* line, int lineLength) {
 
-    // TO BE IMPLEMENTED
+    return 0;
 }
 
 /**
  * This function builds a set of lexemes for provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
  * @param lexemesSet storage memory for lexemes set 
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char** line, char** lexemesSet) {
+int buildLexemesSet(char* line, char** lexemesSet, int lineLength) {
 
-    // TO BE IMPLEMENTED
+    return 0;
 }

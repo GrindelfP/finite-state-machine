@@ -17,7 +17,12 @@ This is a main file for the State Machine program.
 
 int main(int argc, char** argv) {
 
-    stateMachine("asd");
+    char** lexemesSet;
+    char* line = "a = x + y";
 
-    return 0;
+    int programStatus = stateMachine(line, lexemesSet);
+
+    printf("programStatus is %d\n", programStatus);
+
+    return programStatus;
 }

@@ -22,6 +22,7 @@ which is able to perform following operations on a provided text line:
 #ifndef FINITE_STATE_MACHINE_STATE_MACHINE_H
 #define FINITE_STATE_MACHINE_STATE_MACHINE_H
 
+#include <string.h>
 #include "text-pair.h"
 
 /**
@@ -35,36 +36,39 @@ which is able to perform following operations on a provided text line:
  *                   (should be uninitialized, because it is initialized
  *                    inside the function)
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int stateMachine(char** line, char** lexemesSet);
+int stateMachine(char* line, char** lexemesSet);
 
 /**
  * This function removes redundant spaces in a provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int removeRedundantSpaces(char** line);
+int removeRedundantSpaces(char* line, int lineLength);
 
 /**
  * This function removes block commentary from a provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int removeBlockCommentary(char** line);
+int removeBlockCommentary(char* line, int lineLength);
 
 /**
  * This function builds a set of lexemes for provided line.
  * 
- * @param line provided text line
+ * @param line       provided text line
  * @param lexemesSet storage memory for lexemes set 
+ * @param lineLenght lenght of the provided line
  * 
- * @returns 0 if success, 1 if something went wrong
+ * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char** line, char** lexemesSet);
+int buildLexemesSet(char* line, char** lexemesSet, int lineLength);
 
 #endif
