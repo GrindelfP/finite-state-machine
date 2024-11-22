@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "state-machine.h": "c",
+        "text-pair.h": "c"
+    }
+}

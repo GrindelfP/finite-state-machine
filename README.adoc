@@ -1,0 +1,10 @@
+= FINITE STATE MACHINE PROJECT =
+
+== Description ==
+The Finite State Machine project contains an example of a determined state machine,
+which is able to perform following operations on a provided text line: 
+ - delete a block commentary,
+ - delete redundant spaces,
+ - build a lexeme set for a provided line.
+
+ 
