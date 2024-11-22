@@ -31,21 +31,18 @@ which is able to perform following operations on a provided text line:
  * @param lexemesSet storage memory for lexemes set 
  *                   (should be uninitialized, because it is initialized
  *                    inside the function)
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
 int stateMachine(char* line, char** lexemesSet) {
     
-    int status, lineLength = strlen(line);
+    int status;
     
-    status = removeRedundantSpaces(line, lineLength);
+    status = removeRedundantSpaces(line);
 
-    // TODO: make lineLength be calculated inside each time
-
-    if (status == 0) status = removeBlockCommentary(line, lineLength);
+    if (status == 0) status = removeBlockCommentary(line);
     
-    if (status == 0) status = buildLexemesSet(line, lexemesSet, lineLength);
+    if (status == 0) status = buildLexemesSet(line, lexemesSet);
     
     return status;
 } 
@@ -54,23 +51,22 @@ int stateMachine(char* line, char** lexemesSet) {
  * This function removes redundant spaces in a provided line.
  * 
  * @param line       provided text line
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int removeRedundantSpaces(char* line, int lineLength) {
-    int shortener = 1, status = 0;
+int removeRedundantSpaces(char* line) {
+    int shortener = 1, status = 0, lineLength = strlen(line);
     for (int i = 0; i < lineLength - shortener; ++i) {
         if (line[i] == ' ' && line[i + 1] == ' ') {
-            status = removeAtIndex(line, i, lineLength);
+            status = removeAtIndex(line, i);
             i--;
             shortener++;
         } else if (i == 0 && line[i] == ' ') {
-            status = removeAtIndex(line, i, lineLength);
+            status = removeAtIndex(line, i);
             i--;
             shortener++;
         } else if (line[i] == ' ' && line[i + 1] == ';') {
-            status = removeAtIndex(line, i, lineLength);
+            status = removeAtIndex(line, i);
             i--;
             shortener++;
         }
@@ -83,11 +79,10 @@ int removeRedundantSpaces(char* line, int lineLength) {
  * This function removes block commentary from a provided line.
  * 
  * @param line       provided text line
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int removeBlockCommentary(char* line, int lineLength) {
+int removeBlockCommentary(char* line) {
 
     return 0;
 }
@@ -97,11 +92,10 @@ int removeBlockCommentary(char* line, int lineLength) {
  * 
  * @param line       provided text line
  * @param lexemesSet storage memory for lexemes set 
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char** lexemesSet, int lineLength) {
+int buildLexemesSet(char* line, char** lexemesSet) {
 
     return 0;
 }
@@ -111,12 +105,11 @@ int buildLexemesSet(char* line, char** lexemesSet, int lineLength) {
  * 
  * @param line       provided text line
  * @param index      index at which is the element to be removed 
- * @param lineLenght lenght of the provided line
  *
  * @returns 0 if success, -1 if something went wrong
  */
-int removeAtIndex(char *line, int index, int lineLength) {
-    int status = -1;
+int removeAtIndex(char *line, int index) {
+    int status = -1, lineLength = strlen(line);
 
     if (index > 0 && index <= lineLength) {
         status = 0;

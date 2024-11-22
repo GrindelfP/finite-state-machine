@@ -44,42 +44,38 @@ int stateMachine(char* line, char** lexemesSet);
  * This function removes redundant spaces in a provided line.
  * 
  * @param line       provided text line
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int removeRedundantSpaces(char* line, int lineLength);
+int removeRedundantSpaces(char* line);
 
 /**
  * This function removes block commentary from a provided line.
  * 
  * @param line       provided text line
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int removeBlockCommentary(char* line, int lineLength);
+int removeBlockCommentary(char* line);
 
 /**
  * This function builds a set of lexemes for provided line.
  * 
  * @param line       provided text line
  * @param lexemesSet storage memory for lexemes set 
- * @param lineLenght lenght of the provided line
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char** lexemesSet, int lineLength);
+int buildLexemesSet(char* line, char** lexemesSet);
 
 /**
  * This function removes character from a line ant a specified index.
  * 
  * @param line       provided text line
  * @param index      index at which is the element to be removed 
- * @param lineLenght lenght of the provided line
  *
  * @returns 0 if success, -1 if something went wrong
  */
-int removeAtIndex(char *line, int index, int lineLength);
+int removeAtIndex(char *line, int index);
 
 #endif
