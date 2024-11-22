@@ -18,11 +18,11 @@ This is a main file for the State Machine program.
 int main(int argc, char** argv) {
 
     char** lexemesSet;
-    char* line = "a = x + y";
+    char line[] = "a = x       + y";
 
     int programStatus = stateMachine(line, lexemesSet);
 
-    printf("programStatus is %d\n", programStatus);
+    printf("Formated line is %s\n", line);
 
     return programStatus;
 }

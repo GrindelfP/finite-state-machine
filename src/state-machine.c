@@ -41,6 +41,8 @@ int stateMachine(char* line, char** lexemesSet) {
     
     status = removeRedundantSpaces(line, lineLength);
 
+    // TODO: make lineLength be calculated inside each time
+
     if (status == 0) status = removeBlockCommentary(line, lineLength);
     
     if (status == 0) status = buildLexemesSet(line, lexemesSet, lineLength);
@@ -57,8 +59,24 @@ int stateMachine(char* line, char** lexemesSet) {
  * @returns 0 if success, -1 if something went wrong
  */
 int removeRedundantSpaces(char* line, int lineLength) {
-    
-    return -1;
+    int shortener = 1, status = 0;
+    for (int i = 0; i < lineLength - shortener; ++i) {
+        if (line[i] == ' ' && line[i + 1] == ' ') {
+            status = removeAtIndex(line, i, lineLength);
+            i--;
+            shortener++;
+        } else if (i == 0 && line[i] == ' ') {
+            status = removeAtIndex(line, i, lineLength);
+            i--;
+            shortener++;
+        } else if (line[i] == ' ' && line[i + 1] == ';') {
+            status = removeAtIndex(line, i, lineLength);
+            i--;
+            shortener++;
+        }
+    }
+
+    return status;
 }
 
 /**
@@ -86,4 +104,28 @@ int removeBlockCommentary(char* line, int lineLength) {
 int buildLexemesSet(char* line, char** lexemesSet, int lineLength) {
 
     return 0;
+}
+
+/**
+ * This function removes character from a line ant a specified index.
+ * 
+ * @param line       provided text line
+ * @param index      index at which is the element to be removed 
+ * @param lineLenght lenght of the provided line
+ *
+ * @returns 0 if success, -1 if something went wrong
+ */
+int removeAtIndex(char *line, int index, int lineLength) {
+    int status = -1;
+
+    if (index > 0 && index <= lineLength) {
+        status = 0;
+        int i;
+        for (i = index; i < lineLength - 1; ++i) {
+            line[i] = line[i + 1];
+        }
+        line[i] = '\0';
+    } 
+
+    return status;
 }

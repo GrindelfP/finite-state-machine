@@ -71,4 +71,15 @@ int removeBlockCommentary(char* line, int lineLength);
  */
 int buildLexemesSet(char* line, char** lexemesSet, int lineLength);
 
+/**
+ * This function removes character from a line ant a specified index.
+ * 
+ * @param line       provided text line
+ * @param index      index at which is the element to be removed 
+ * @param lineLenght lenght of the provided line
+ *
+ * @returns 0 if success, -1 if something went wrong
+ */
+int removeAtIndex(char *line, int index, int lineLength);
+
 #endif
