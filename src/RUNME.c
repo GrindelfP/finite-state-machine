@@ -14,21 +14,39 @@ This is a main file for the State Machine program.
 */
 #include <stdio.h>
 #include "state-machine.h"
+#define INPUT_LENGTH 60
+int handleInputLine(char *line);
 
 int main(int argc, char** argv) {
     
-    char line[] = "a = w       + wxyz;!/*sadasd*/";
-    char* lexemesSet = malloc(strlen(line) + 1);
+    char* line = malloc(INPUT_LENGTH), * lexemesSet = malloc(strlen(line) + 1);
+    int status = handleInputLine(line);
 
-    char line2[] = "0123456789";
+    if (status == 0) status = stateMachine(line, lexemesSet);
 
-    int programStatus = stateMachine(line, lexemesSet);
+    if (status == 0) {
+        printf("Formated line is: %s\n", line);
+        printf("Lexemes set for this line is: [\n");
+        printf("%s", lexemesSet);
+        printf("]\n");
+    }
 
-    printf("Formated line is %s\n", line);
+    free(lexemesSet);
+    free(line);
 
-    removeSubstring(line2, 2, 7);
+    return status;
+}
 
-    printf("%s", line2);
+int handleInputLine(char *line) {
 
-    return programStatus;
+    int status = 0;
+
+    printf("Enter here the line to be formated\n(up to 60 characters, others will be truncated): ");
+
+    if (fgets(line, INPUT_LENGTH, stdin)) {
+        line[strcspn(line, "\n")] = 0;
+        printf("Here is your line: %s\n", line);
+    }
+
+    return status;
 }

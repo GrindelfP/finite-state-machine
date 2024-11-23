@@ -69,7 +69,7 @@ int removeBlockCommentary(char* line);
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char* lexemesSet);
+int printLexemesSet(char* line);
 
 /**
  * This function removes character from a line ant a specified index.
@@ -81,6 +81,15 @@ int buildLexemesSet(char* line, char* lexemesSet);
  */
 int removeAtIndex(char *line, int index);
 
+/**
+ * This function removes subsltring from a line marked by indices.
+ * 
+ * @param line       provided text line
+ * @param startIndex index at which the substring starts
+ * @param endIndex   index at which the substring ends
+ *
+ * @returns 0 if success, -1 if something went wrong
+ */
 int removeSubstring(char* line, int startIndex, int endIndex);
 
 #endif

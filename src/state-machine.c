@@ -38,11 +38,11 @@ int stateMachine(char* line, char* lexemesSet) {
     
     int status;
     
-    status = removeRedundantSpaces(line);
-
-    if (status == 0) status = removeBlockCommentary(line);
+    status = removeBlockCommentary(line);
     
-    if (status == 0) status = buildLexemesSet(line, lexemesSet);
+    if (status == 0) status = removeRedundantSpaces(line);
+    
+    if (status == 0) status = printLexemesSet(line);
     
     return status;
 } 
@@ -69,6 +69,14 @@ int removeRedundantSpaces(char* line) {
             status = removeAtIndex(line, i);
             i--;
             shortener++;
+        } else if (line[i] == ' ' && line[i + 1] == ')') {
+            status = removeAtIndex(line, i);
+            i--;
+            shortener++;
+        } else if (line[i] == '(' && line[i + 1] == ' ') {
+            status = removeAtIndex(line, i + 1);
+            i--;
+            shortener++;
         }
     }
 
@@ -93,61 +101,64 @@ int removeBlockCommentary(char* line) {
         ╠═══════╬═══════╬════╬════╬═══════╣
         ║ q0    ║ ε     ║ q1 ║ q0 ║  q0   ║
         ║ q1    ║ '/'   ║ q1 ║ q2 ║  q0   ║
-        ║ q2    ║ '/*'  ║ q0 ║ q3 ║  q2   ║
+        ║ q2    ║ '/*'  ║ q2 ║ q3 ║  q2   ║
         ║ q3    ║ '/**' ║ q0 ║ q3 ║  q2   ║
         ╚═══════╩═══════╩════╩════╩═══════╝
     */
     
-    int state = 0, status = 0, lineLength = strlen(line), startIndex = 0, endIndex = 0;
+    int state = 0, status = 0, lineLength = strlen(line), startIndex = 0, endIndex = 0, stateChanged = 1;
 
-    for (int i = 0; i < lineLength; ++i) {
-        switch (state) {
-        case 0:
-            if (line[i] == '/') { state = 1; startIndex = i; }
-            else if (line[i] == '*') state = 0;
-            else state = 0;
-            break;
- 
-        case 1:
-            if (line[i] == '/') state = 1;
-            else if (line[i] == '*') state = 2;
-            else state = 0;
-            break;
-
-        case 2:
-            if (line[i] == '/') state = 1;
-            else if (line[i] == '*') state = 3;
-            else state = 2;
-            break;
-
-        case 3:
-            if (line[i] == '/') {
-                endIndex = i;
-                removeSubstring(line, startIndex, endIndex);
-                state = 0;
-            }
-            else if (line[i] == '*') state = 3;
-            else state = 2;
-            break;
-
-        default:
-            status = -1; break;
-        }
+    while (stateChanged == 1) {
+        stateChanged = 0;
+        for (int i = 0; i < lineLength; ++i) {
+            
+            switch (state) {
+                case 0:
+                    if (line[i] == '/') { state = 1; startIndex = i; stateChanged = 1; }
+                    else if (line[i] == '*') {state = 0; stateChanged = 0;}
+                    else { state = 0; stateChanged = 0; }
+                    break;
         
-    }
+                case 1:
+                    if (line[i] == '/') {state = 1; stateChanged = 0;}
+                    else if (line[i] == '*') {state = 2; stateChanged = 1;}
+                    else { state = 0; stateChanged = 0; }
+                    break;
 
+                case 2:
+                    if (line[i] == '/') {state = 2; stateChanged = 0; }
+                    else if (line[i] == '*') { state = 3; stateChanged = 1; }
+                    else { state = 2; stateChanged = 0;}
+                    break;
+
+                case 3:
+                    if (line[i] == '/') {
+                        endIndex = i;
+                        removeSubstring(line, startIndex, endIndex);
+                        state = 0;
+                        stateChanged = 0;
+                    }
+                    else if (line[i] == '*') { state = 3; stateChanged = 0; }
+                    else { state = 2; stateChanged = 1; }
+                    break;
+
+                default:
+                    { status = -1; break; stateChanged = 0; }
+            }
+        }
+    }
+    
     return status;
 }
 
 /**
- * This function builds a set of lexemes for provided line.
+ * This function prints a set of lexemes for provided line.
  * 
  * @param line       provided text line
- * @param lexemesSet storage memory for lexemes set 
  * 
  * @returns 0 if success, -1 if something went wrong
  */
-int buildLexemesSet(char* line, char* lexemesSet) {
+int printLexemesSet(char* line) {
 
     char *lexemes = malloc(strlen(line) + 1);
     int i = 0;
@@ -181,7 +192,6 @@ int buildLexemesSet(char* line, char* lexemesSet) {
         }
     }
 
-    strcpy(lexemesSet, lexemes);
     free(lexemes);
     
     return 0; // I guess there is nothingh which can go wrong in the logic 
@@ -189,10 +199,10 @@ int buildLexemesSet(char* line, char* lexemesSet) {
 }
 
 /**
- * This function removes character from a line ant a specified index.
+ * This function removes character from a line at a specified index.
  * 
- * @param line       provided text line
- * @param index      index at which is the element to be removed 
+ * @param line  provided text line
+ * @param index index at which is the element to be removed 
  *
  * @returns 0 if success, -1 if something went wrong
  */
@@ -211,6 +221,15 @@ int removeAtIndex(char *line, int index) {
     return status;
 }
 
+/**
+ * This function removes subsltring from a line marked by indices.
+ * 
+ * @param line       provided text line
+ * @param startIndex index at which the substring starts
+ * @param endIndex   index at which the substring ends
+ *
+ * @returns 0 if success, -1 if something went wrong
+ */
 int removeSubstring(char* line, int startIndex, int endIndex) {
     int status = -1, len = strlen(line);
     
